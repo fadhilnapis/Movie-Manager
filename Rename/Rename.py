@@ -95,12 +95,6 @@ def rename(path, format="{} ({}) {} {} {}"):
 	return re.sub(' +',' ',new_name)
 	pass
 def getExtension(path):
-	extension = ""
-	try:
-		if path.endswith(".mkv") or path.endswith(".mp4") or path.endswith(".avi") or path.endswith(".flv") or path.endswith(".rmvb"):
-			extension = "."+path.rsplit('.',1)[1]
-		pass
-	except Exception as e:
-		pass
+	extension = "."+path.rsplit('.',1)[1]
 	return extension;
 	pass

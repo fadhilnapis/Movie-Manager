@@ -20,6 +20,7 @@ if os.path.isfile(file_path):
 	new_path = os.path.join(file_folder,file_new_folder+"\\"+file_name+Rename.getExtension(file_name_ori))
 	if not os.path.exists(file_new_folder):
 	    os.makedirs(file_new_folder)
+	    pass
 else:
 	new_path = os.path.join(file_folder,file_name+Rename.getExtension(file_name_ori))
 	pass
