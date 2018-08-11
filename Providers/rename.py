@@ -18,6 +18,9 @@ pirateRelease=['CAMRip','CAM',
 'WEB-Cap','WEBCAP',
 'BDRip','BRRip','Blu-Ray','BluRay','BDR','BD5','BD9','BD25','BD50'];
 
+FILE_ATTRIBUTE_NORMAL = 0x80
+FILE_ATTRIBUTE_HIDDEN = 0x02
+
 def getAttribute(OriginalName='',arrfile='',mode=1):
 	movieYearIndex=0;
 	movieYear='';
@@ -107,37 +110,39 @@ def getNameOnly(path):
 	return extension;
 	pass
 
-def downloadTo(path,url):
+def downloadTo(path, url, hidden=False):
 	extension = ".jpg"
-	if url.endswith(".png") or url.endswith(".jpg"):
+	if url.endswith(".png") or url.endswith(".jpg") or url.endswith(".gif"):
 		extension = "."+url.rsplit(".",1)[1]
 
 	r = requests.get(url, stream=True)
 	if r.status_code == 200:
-	    with open(path+extension, 'wb') as f:
-	        for chunk in r:
-	            f.write(chunk)
-	    return True
+		with open(path+extension, 'wb') as f:
+			for chunk in r:
+				f.write(chunk)
+		if hidden:
+			ctypes.windll.kernel32.SetFileAttributesW(path+extension,FILE_ATTRIBUTE_HIDDEN)
+			pass
+		return True
 	else:
 		return False
 
 # Example of getting file content
 
 def getFileContent(pathAndFileName):
-    with open(pathAndFileName, 'r') as theFile:
-        # Return a list of lines (strings)
-        # data = theFile.read().split('\n')
-        
-        # Return as string without line breaks
-        # data = theFile.read().replace('\n', '')
-        
-        # Return as string
-        data = theFile.read()
-        return data
+	with open(pathAndFileName, 'r') as theFile:
+		# Return a list of lines (strings)
+		# data = theFile.read().split('\n')
+		
+		# Return as string without line breaks
+		# data = theFile.read().replace('\n', '')
+		
+		# Return as string
+		data = theFile.read()
+		return data
 
 def writeTo(path, content, hidden=False):
 	if os.path.exists(path):
-		FILE_ATTRIBUTE_NORMAL = 0x80
 		ctypes.windll.kernel32.SetFileAttributesW(path,FILE_ATTRIBUTE_NORMAL)
 		pass
 
@@ -146,7 +151,6 @@ def writeTo(path, content, hidden=False):
 	file.close()
 	
 	if hidden:
-		FILE_ATTRIBUTE_HIDDEN = 0x02
 		ctypes.windll.kernel32.SetFileAttributesW(path,FILE_ATTRIBUTE_HIDDEN)
 		pass
 	pass

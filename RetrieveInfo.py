@@ -1,5 +1,5 @@
 import sys, os
-from Providers import rename, omdb
+from Providers import rename, omdb, fanart
 
 if len(sys.argv)>1:
 	file_path = sys.argv[1]
@@ -32,19 +32,54 @@ if "Search" in movie_result["json"]:
 		movie_json = movie_info["json"]
 
 		nfo_target_path = file_path+".nfo"
-		poster_target_path_name = file_path
-		fanart_target_path_name = file_path
-		if os.path.isdir(file_path):
-			nfo_target_path = os.path.join(file_path,"movie.nfo")
-			poster_target_path_name = os.path.join(file_path,"poster")
-			fanart_target_path_name = os.path.join(file_path,"fanart")
-		else:
-			nfo_target_path = os.path.join(file_path_parent,rename.getNameOnly(file_name_ori)+".nfo")
-			poster_target_path_name = os.path.join(file_path_parent,rename.getNameOnly(file_name_ori)+"-poster")
-			fanart_target_path_name = os.path.join(file_path_parent,rename.getNameOnly(file_name_ori)+"-fanart")
+		target_path=dict()
+
+		fnart = fanart.getArt(movie_json['id'])
+
+		target_path["poster"] = dict()
+		target_path["fanart"] = dict()
+		target_path["clearart"] = dict()
+		target_path["clearlogo"] = dict()
+
+		target_path["poster"]["name"] = file_path
+		target_path["fanart"]["name"] = file_path
+		target_path["clearart"]["name"] = file_path
+		target_path["clearlogo"]["name"] = file_path
+
+		target_path["poster"]["url"] = movie_json["Poster"]
+		target_path["fanart"]["url"] = False
+		target_path["clearart"]["url"] = False
+		target_path["clearlogo"]["url"] = False
+
+		if len(fnart["moviebackground"])>0:
+			target_path["fanart"]["url"] = fnart["moviebackground"][0]["url"]
+			pass
+		if len(fnart["hdmovieclearart"])>0:
+			target_path["clearart"]["url"] = fnart["hdmovieclearart"][0]["url"]
+			pass
+		if len(fnart["hdmovielogo"])>0:
+			target_path["clearlogo"]["url"] = fnart["hdmovielogo"][0]["url"]
 			pass
 
-		rename.downloadTo(poster_target_path_name, movie_json["Poster"])
+		if os.path.isdir(file_path):
+			nfo_target_path = os.path.join(file_path,"movie.nfo")
+			target_path["poster"]["name"] = os.path.join(file_path,"poster")
+			target_path["fanart"]["name"] = os.path.join(file_path,"fanart")
+			target_path["clearart"]["name"] = os.path.join(file_path,"clearart")
+			target_path["clearlogo"]["name"] = os.path.join(file_path,"clearlogo")
+		else:
+			nfo_target_path = os.path.join(file_path_parent,rename.getNameOnly(file_name_ori)+".nfo")
+			target_path["poster"]["name"] = os.path.join(file_path_parent,rename.getNameOnly(file_name_ori)+"-poster")
+			target_path["fanart"]["name"] = os.path.join(file_path_parent,rename.getNameOnly(file_name_ori)+"-fanart")
+			target_path["clearart"]["name"] = os.path.join(file_path_parent,rename.getNameOnly(file_name_ori)+"-clearart")
+			target_path["clearlogo"]["name"] = os.path.join(file_path_parent,rename.getNameOnly(file_name_ori)+"-clearlogo")
+			pass
+
+		rename.downloadTo(target_path["poster"]["name"], target_path["poster"]["url"])
+		rename.downloadTo(target_path["fanart"]["name"], target_path["fanart"]["url"], hidden=True)
+		rename.downloadTo(target_path["clearart"]["name"], target_path["clearart"]["url"], hidden=True)
+		rename.downloadTo(target_path["clearlogo"]["name"], target_path["clearlogo"]["url"], hidden=True)
+
 		rename.writeTo(nfo_target_path, movie_xml, True)
 		print("Done!")
 		pass
