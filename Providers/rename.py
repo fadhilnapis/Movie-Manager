@@ -136,6 +136,11 @@ def getFileContent(pathAndFileName):
         return data
 
 def writeTo(path, content, hidden=False):
+	if os.path.exists(path):
+		FILE_ATTRIBUTE_NORMAL = 0x80
+		ctypes.windll.kernel32.SetFileAttributesW(path,FILE_ATTRIBUTE_NORMAL)
+		pass
+
 	file = open(path, 'w');
 	file.write(content)
 	file.close()

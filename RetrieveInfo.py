@@ -33,12 +33,15 @@ if "Search" in movie_result["json"]:
 
 		nfo_target_path = file_path+".nfo"
 		poster_target_path_name = file_path
+		fanart_target_path_name = file_path
 		if os.path.isdir(file_path):
 			nfo_target_path = os.path.join(file_path,"movie.nfo")
 			poster_target_path_name = os.path.join(file_path,"poster")
+			fanart_target_path_name = os.path.join(file_path,"fanart")
 		else:
 			nfo_target_path = os.path.join(file_path_parent,rename.getNameOnly(file_name_ori)+".nfo")
-			poster_target_path_name = os.path.join(file_path_parent,rename.getNameOnly(file_name_ori))
+			poster_target_path_name = os.path.join(file_path_parent,rename.getNameOnly(file_name_ori)+"-poster")
+			fanart_target_path_name = os.path.join(file_path_parent,rename.getNameOnly(file_name_ori)+"-fanart")
 			pass
 
 		rename.downloadTo(poster_target_path_name, movie_json["Poster"])

@@ -59,10 +59,8 @@ def assignSet(movie_set):
 	xml_dict = getInfo()
 	xml_dict["movie"]["set"]=movie_set
 	xml_text = "\n".join(xmltodict.unparse(xml_dict, pretty=True).split("\n")[1:])
+	xml_text = jsonxml.KODI_HEADER+xml_text
 	print(nfo_file)
-
-	FILE_ATTRIBUTE_NORMAL = 0x80
-	ctypes.windll.kernel32.SetFileAttributesW(nfo_file,FILE_ATTRIBUTE_NORMAL)
 
 	rename.writeTo(nfo_file, xml_text, hidden=True)
 	print("assigned!")

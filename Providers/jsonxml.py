@@ -1,6 +1,8 @@
 from src.json2xml import Json2xml
 import xmltodict,os,dict2xml,ctypes
 
+KODI_HEADER = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n'
+
 def convert(data,parent="movie"):
 	data_object = Json2xml(data)
 
@@ -13,7 +15,7 @@ def convert(data,parent="movie"):
 		pass
 	finaldic = dict()
 	finaldic[parent]=newdicktxml
-	newxml = dict2xml.dict2xml(finaldic)
+	newxml = KODI_HEADER+dict2xml.dict2xml(finaldic)
 	return newxml
 
 # 	pass

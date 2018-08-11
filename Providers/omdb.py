@@ -9,12 +9,21 @@ OMDB_WITH_KEY = OMDB_HOST + "?apikey=" + OMDB_KEY;
 def getFrom(parameter,value):
 	url = OMDB_WITH_KEY + "&"+parameter+"=" + value
 	result = requests.get(url)
+	resjson = result.json()
+	if parameter=="i":
+		resjson["id"] = resjson["imdbID"]
+
+		resjson["mpaa"] = resjson["Rated"]
+
+		resjson["Runtime"] = ''.join(filter(str.isdigit, resjson["Runtime"]))
+		pass
+
 	output = {
-		"json": result.json(),
-		"xml": jsonxml.convert(result.json()),
+		"json": resjson,
+		"xml": jsonxml.convert(resjson),
 	}
 	if "Poster" in output["json"]:
-		output["Poster"] = result.json()["Poster"]
+		output["Poster"] = resjson["Poster"]
 	return output
 	pass
 
