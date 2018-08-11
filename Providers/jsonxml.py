@@ -1,18 +1,18 @@
 from src.json2xml import Json2xml
 import xmltodict,os,dict2xml,ctypes
 
-def convert(data):
+def convert(data,parent="movie"):
 	data_object = Json2xml(data)
 
 	dicxml = xmltodict.parse(data_object.json2xml())
 
-	dicxml["movie"] = dicxml.pop("all")
+	dicxml[parent] = dicxml.pop("all")
 	newdicktxml = dict()
-	for k,v in dicxml["movie"].items():
+	for k,v in dicxml[parent].items():
 		newdicktxml[k.lower()]=v
 		pass
 	finaldic = dict()
-	finaldic["movie"]=newdicktxml
+	finaldic[parent]=newdicktxml
 	newxml = dict2xml.dict2xml(finaldic)
 	return newxml
 

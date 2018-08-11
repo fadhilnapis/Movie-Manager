@@ -1,7 +1,7 @@
 from Providers import rename
 import json
 
-MOVIE_SETS_PATH = "Storage/MovieSets.json"
+MOVIE_SETS_PATH = "C:\\Users\\Fadz\\Documents\\Movie\\Movie Manager\\Storage/MovieSets.json"
 movieSets_str = rename.getFileContent(MOVIE_SETS_PATH)
 movie_json = json.loads(movieSets_str)
 movieSets = movie_json["Sets"]
@@ -16,6 +16,7 @@ def removeSets(name):
 			del movieSets[set_index]
 			pass
 		pass
+		
 def getSets(name):
 	for set_index in range(len(movieSets)):
 		if movieSets[set_index]["name"] == name:
@@ -25,5 +26,6 @@ def getSets(name):
 	return
 	pass
 def save():
-	movie_json["Sets"]
+	movie_json["Sets"] = movieSets;
+	rename.writeTo(MOVIE_SETS_PATH,json.dumps(movie_json))
 	pass

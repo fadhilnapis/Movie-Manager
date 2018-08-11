@@ -135,7 +135,6 @@ def getFileContent(pathAndFileName):
         data = theFile.read()
         return data
 
-
 def writeTo(path, content, hidden=False):
 	file = open(path, 'w');
 	file.write(content)
