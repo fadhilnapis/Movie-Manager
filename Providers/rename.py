@@ -121,6 +121,21 @@ def downloadTo(path,url):
 	else:
 		return False
 
+# Example of getting file content
+
+def getFileContent(pathAndFileName):
+    with open(pathAndFileName, 'r') as theFile:
+        # Return a list of lines (strings)
+        # data = theFile.read().split('\n')
+        
+        # Return as string without line breaks
+        # data = theFile.read().replace('\n', '')
+        
+        # Return as string
+        data = theFile.read()
+        return data
+
+
 def writeTo(path, content, hidden=False):
 	file = open(path, 'w');
 	file.write(content)
