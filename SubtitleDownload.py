@@ -44,6 +44,10 @@ def zip_extractor(name, new_name, path, lang="MA"):
 				z.extract(target_name,path)
 				pass
 			new_path = os.path.join(path,new_name+"."+subscene.LANGUAGE[lang]+ext)
+			if os.path.exists(new_path):
+				os.remove(new_path)
+				print("-________________REMOVE OLD SUBTITLE________________-")
+				pass
 			os.rename(os.path.join(path, target_name),new_path)
 
 			FILE_ATTRIBUTE_HIDDEN = 0x02
