@@ -1,5 +1,5 @@
 import sys, os
-from Rename import Rename
+from Providers import rename
 
 import Providers.omdb as omdb
 
@@ -12,7 +12,7 @@ else:
 	pass
 file_path_parent = os.path.dirname(file_path)
 file_name_ori = os.path.basename(file_path)
-file_name = Rename.rename(file_name_ori, "{}")
+file_name = rename.rename(file_name_ori, "{}")
 
 movie_result = omdb.getFrom("s", file_name)
 
@@ -36,10 +36,10 @@ if "Search" in movie_result["json"]:
 		if os.path.isdir(file_path):
 			target_path = os.path.join(file_path,"movie.nfo")
 		else:
-			target_path = os.path.join(file_path_parent,Rename.getNameOnly(file_name_ori)+".nfo")
+			target_path = os.path.join(file_path_parent,rename.getNameOnly(file_name_ori)+".nfo")
 			pass
 
-		Rename.writeTo(target_path, movie_nfo, True)
+		rename.writeTo(target_path, movie_nfo, True)
 		print("Done!")
 		pass
 	else:

@@ -1,4 +1,4 @@
-import os, re
+import os, re, ctypes
 ripQuality = ["4320p", "2160p", "1440p", "1080p", "1080i", "720p", "720i", "480p", "480i", "360p", "240p"]
 ripQualityWidth = ["7680", "3840", "2560", "1920", "1920", "1280", "1280", "858", "858", "480", "352"]
 pirateRelease=['CAMRip','CAM',

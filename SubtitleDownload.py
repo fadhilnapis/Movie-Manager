@@ -2,7 +2,7 @@
 import Providers.subscene as subscene
 import sys, os, re, zipfile
 import requests
-from Rename import Rename
+from Providers import rename
 
 if len(sys.argv)>1:
 	file_path = sys.argv[1]
@@ -29,11 +29,11 @@ def zip_extractor(name, new_name, path):
 
 				file_ind = int(input("Which one?:"))
 				target_name = zfile_list[file_ind]
-				ext = Rename.getExtension(target_name)
+				ext = rename.getExtension(target_name)
 				z.extract(target_name,path)
 			else:
 				target_name = zfile_list[0]
-				ext = Rename.getExtension(target_name)
+				ext = rename.getExtension(target_name)
 
 				z.extractall(target_name,path)
 				pass
@@ -65,7 +65,7 @@ def dl_sub(page, name, path="./"):
 
 
 basename_ori = os.path.basename(file_path)
-file_name = Rename.rename(basename_ori)
+file_name = rename.rename(basename_ori)
 
 file_parent = os.path.dirname(file_path)
 find_path = os.path.join(file_parent, basename_ori);
@@ -79,12 +79,12 @@ if os.path.isdir(basename_ori):
 			break
 		pass
 	movie_name_ori = movie_name_ori.rsplit('.',1)[0]
-	movie_name = Rename.rename(movie_name_ori, format="{}")
+	movie_name = rename.rename(movie_name_ori, format="{}")
 	target_path = os.path.join(file_parent,basename_ori,movie_name_ori)
 	pass
 else:
 	movie_name_ori = basename_ori.rsplit('.',1)[0]
-	movie_name = Rename.rename(movie_name_ori, format="{}")
+	movie_name = rename.rename(movie_name_ori, format="{}")
 	target_path = os.path.join(file_parent,movie_name_ori)
 	pass
 
