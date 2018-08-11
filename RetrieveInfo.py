@@ -1,7 +1,5 @@
 import sys, os
-from Providers import rename
-
-import Providers.omdb as omdb
+from Providers import rename, omdb
 
 if len(sys.argv)>1:
 	file_path = sys.argv[1]
@@ -22,7 +20,7 @@ if "Search" in movie_result["json"]:
 	count=0
 	movies = movie_result["json"]["Search"]
 	for movie in movies:
-		print(" ({}): {}".format(count, movie["Title"]))
+		print(" ({}): {} ({})".format(count, movie["Title"], movie["Year"]))
 		count+=1
 	pass
 	if len(movies)>0:
@@ -30,16 +28,21 @@ if "Search" in movie_result["json"]:
 		movie_index = int(input("Insert movie index number: "))
 
 		movie_info = omdb.getFrom("i", movies[movie_index]["imdbID"])
-		movie_nfo = movie_info["xml"]
+		movie_xml = movie_info["xml"]
+		movie_json = movie_info["json"]
 
-		target_path = file_path+".nfo"
+		nfo_target_path = file_path+".nfo"
+		poster_target_path_name = file_path
 		if os.path.isdir(file_path):
-			target_path = os.path.join(file_path,"movie.nfo")
+			nfo_target_path = os.path.join(file_path,"movie.nfo")
+			poster_target_path_name = os.path.join(file_path,"poster")
 		else:
-			target_path = os.path.join(file_path_parent,rename.getNameOnly(file_name_ori)+".nfo")
+			nfo_target_path = os.path.join(file_path_parent,rename.getNameOnly(file_name_ori)+".nfo")
+			poster_target_path_name = os.path.join(file_path_parent,rename.getNameOnly(file_name_ori))
 			pass
 
-		rename.writeTo(target_path, movie_nfo, True)
+		rename.downloadTo(poster_target_path_name, movie_json["Poster"])
+		rename.writeTo(nfo_target_path, movie_xml, True)
 		print("Done!")
 		pass
 	else:

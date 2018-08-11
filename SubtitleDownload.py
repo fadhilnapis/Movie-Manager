@@ -1,8 +1,7 @@
 # coding: utf-8
-import Providers.subscene as subscene
 import sys, os, re, zipfile
 import requests
-from Providers import rename
+from Providers import rename, subscene
 
 if len(sys.argv)>1:
 	file_path = sys.argv[1]

@@ -1,4 +1,4 @@
-import os, re, ctypes
+import os, re, ctypes, requests
 ripQuality = ["4320p", "2160p", "1440p", "1080p", "1080i", "720p", "720i", "480p", "480i", "360p", "240p"]
 ripQualityWidth = ["7680", "3840", "2560", "1920", "1920", "1280", "1280", "858", "858", "480", "352"]
 pirateRelease=['CAMRip','CAM',
@@ -106,6 +106,20 @@ def getNameOnly(path):
 	extension = path.rsplit('.',1)[0]
 	return extension;
 	pass
+
+def downloadTo(path,url):
+	extension = ".jpg"
+	if url.endswith(".png") or url.endswith(".jpg"):
+		extension = "."+url.rsplit(".",1)[1]
+
+	r = requests.get(url, stream=True)
+	if r.status_code == 200:
+	    with open(path+extension, 'wb') as f:
+	        for chunk in r:
+	            f.write(chunk)
+	    return True
+	else:
+		return False
 
 def writeTo(path, content, hidden=False):
 	file = open(path, 'w');

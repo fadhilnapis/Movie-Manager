@@ -1,5 +1,5 @@
 import requests
-import Providers.jsonxml as json2xml
+from Providers import jsonxml
 
 OMDB_HOST = "http://www.omdbapi.com/"
 OMDB_KEY = '9990d5d8'
@@ -9,7 +9,13 @@ OMDB_WITH_KEY = OMDB_HOST + "?apikey=" + OMDB_KEY;
 def getFrom(parameter,value):
 	url = OMDB_WITH_KEY + "&"+parameter+"=" + value
 	result = requests.get(url)
-	return {"json":result.json(), "xml":json2xml.convert(result.json())}
+	output = {
+		"json": result.json(),
+		"xml": jsonxml.convert(result.json()),
+	}
+	if "Poster" in output["json"]:
+		output["Poster"] = result.json()["Poster"]
+	return output
 	pass
 
 
