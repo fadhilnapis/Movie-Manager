@@ -16,16 +16,6 @@ def convert(data):
 	newxml = dict2xml.dict2xml(finaldic)
 	return newxml
 
-def writeTo(path, content, hidden=True):
-	if hidden:
-		FILE_ATTRIBUTE_HIDDEN = 0x02
-		ctypes.windll.kernel32.SetFileAttributesW(path,FILE_ATTRIBUTE_HIDDEN)
-		pass
-	file = open(path, 'w');
-	file.write(content)
-	file.close()
-	pass
-
 # 	pass
 # for x in os.listdir("./"):
 # 	if os.path.isdir("./"+x):

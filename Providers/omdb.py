@@ -11,3 +11,16 @@ def getFrom(parameter,value):
 	result = requests.get(url)
 	return {"json":result.json(), "xml":json2xml.convert(result.json())}
 	pass
+
+
+# import tmdbsimple as tmdb
+# import jsonxml as jsonxml
+# tmdb.API_KEY = '35ab048926236313bb053ec3c64d5116'
+# search = tmdb.Search()
+# # response = search.movie(query='Black Panther')
+# # for s in search.results:
+# # 	print(jsonxml.convert({"result":s}))
+# # 	pass
+
+# movie = tmdb.Movies(284054)
+# print(jsonxml.convert(movie.info()))

@@ -94,7 +94,32 @@ def rename(path, format="{} ({}) {} {} {}"):
 	new_name = format.format(property[0],property[1],property[2],property[3],property[4]).strip()
 	return re.sub(' +',' ',new_name)
 	pass
+
 def getExtension(path):
+	path = os.path.basename(path)
 	extension = "."+path.rsplit('.',1)[1]
 	return extension;
 	pass
+
+def getNameOnly(path):
+	path = os.path.basename(path)
+	extension = path.rsplit('.',1)[0]
+	return extension;
+	pass
+
+def writeTo(path, content, hidden=False):
+	file = open(path, 'w');
+	file.write(content)
+	file.close()
+	
+	if hidden:
+		FILE_ATTRIBUTE_HIDDEN = 0x02
+		ctypes.windll.kernel32.SetFileAttributesW(path,FILE_ATTRIBUTE_HIDDEN)
+		pass
+	pass
+
+# from movie_searcher import Searcher
+# searcher = Searcher()
+# r = searcher.getUrls('功夫')
+
+# print(r)
