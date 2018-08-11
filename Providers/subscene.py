@@ -63,7 +63,7 @@ def zip_extractor(name):
         logger.warning("Zip Extractor Error: {}".format(e))
 
 
-def silent_mode(title_name, category, name=''):
+def silent_mode(title_name, category, name='', lang=DEFAULT_LANG):
     '''
     An automatic mode for selecting media title from subscene site.
     :param title_name: title names obtained from get_title function.
@@ -91,7 +91,7 @@ def silent_mode(title_name, category, name=''):
                 # Loops through the name (list) and if all the elements of the
                 # list are present in result, returns the link.
                  if match == len(name.split()):
-                     return "https://subscene.com" + results.a.get("href") + "/" + DEFAULT_LANG
+                     return "https://subscene.com" + results.a.get("href") + "/" + LANGUAGE[lang]
                  match += 1
 
     # Searches first in Popular category, if found, returns the title name
@@ -101,7 +101,7 @@ def silent_mode(title_name, category, name=''):
     return obt_link
 
 
-def cli_mode(titles_name, category):
+def cli_mode(titles_name, category, lang=DEFAULT_LANG):
     '''
     A manual mode driven by user, allows user to select subtitles manually
     from the command-line.
@@ -117,7 +117,7 @@ def cli_mode(titles_name, category):
 
     try:
         qs = int(input("\nPlease Enter Movie Number: "))
-        return "https://subscene.com" + titles_and_links[media_titles[qs]] + "/" + DEFAULT_LANG
+        return "https://subscene.com" + titles_and_links[media_titles[qs]] + "/" + LANGUAGE[lang]
 
     except Exception as e:
         logger.warning("Movie Skipped - {}".format(e))
@@ -125,7 +125,7 @@ def cli_mode(titles_name, category):
         return
 
 
-def sel_title(name):
+def sel_title(name, lang=DEFAULT_LANG):
     '''
     Select title of the media (i.e., Movie, TV-Series)
     :param title_lst: Title Names from the function get_title
@@ -164,14 +164,14 @@ def sel_title(name):
         popular = titles.find("h2", {"class": "popular"}) # Searches for the popular tag
         if MODE == "prompt":
             logger.info("Running in PROMPT mode.")
-            return cli_mode(titles, category=popular)
+            return cli_mode(titles, category=popular, lang=lang)
         else:
             logger.info("Running in SILENT mode.")
-            return silent_mode(titles, category=popular, name=name.replace('.', ' '))
+            return silent_mode(titles, category=popular, name=name.replace('.', ' '), lang=lang)
 
 
 # Select Subtitles
-def sel_sub(page, sub_count=1, name=""):
+def sel_sub(page, name="", lang=DEFAULT_LANG):
     '''
     Select subtitles from the movie page.
     :param sub_count: Number of subtitles to be downloaded.
@@ -187,7 +187,7 @@ def sel_sub(page, sub_count=1, name=""):
         link = link.find('a')
         if 'trailer' not in link.text.lower()\
                         and link.get('href') not in sub_list and\
-                        DEFAULT_LANG in link.text:
+                        LANGUAGE[lang].lower() in link.text.lower():
             # if movie = Doctor.Strange.2016, this first condition is not
             # going to be executed because the length of the list will be 0
             # we format the name by replacing dots with spaces, which will

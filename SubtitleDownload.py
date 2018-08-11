@@ -1,5 +1,5 @@
 # coding: utf-8
-import sys, os, re, zipfile
+import sys, os, re, zipfile, ctypes
 import requests
 from Providers import rename, subscene
 
@@ -10,7 +10,14 @@ else:
 	file_path = "C:\\Users\\Fadz\\Documents\\Movie\\Deadpool 2 (2018) WEBRip 1080p"
 	pass
 
-def zip_extractor(name, new_name, path):
+if len(sys.argv)>2:
+	sub_lang = sys.argv[2]
+	pass
+else:
+	sub_lang = "MA"
+	pass
+
+def zip_extractor(name, new_name, path, lang="MA"):
 	'''
 	Extracts zip file obtained from the Subscene site (which contains subtitles).
 	'''
@@ -33,17 +40,21 @@ def zip_extractor(name, new_name, path):
 			else:
 				target_name = zfile_list[0]
 				ext = rename.getExtension(target_name)
-
-				z.extractall(target_name,path)
+				print(target_name,path)
+				z.extract(target_name,path)
 				pass
-			os.rename(os.path.join(path, target_name), os.path.join(path,new_name+ext))
+			new_path = os.path.join(path,new_name+"."+subscene.LANGUAGE[lang]+ext)
+			os.rename(os.path.join(path, target_name),new_path)
+
+			FILE_ATTRIBUTE_HIDDEN = 0x02
+			ctypes.windll.kernel32.SetFileAttributesW(new_path,FILE_ATTRIBUTE_HIDDEN)
 			pass
 	os.remove(name)
 	print("Done.\n");
 	pass
 
 
-def dl_sub(page, name, path="./"):
+def dl_sub(page, name, path="./", lang="MA"):
 	'''
 	Download subtitles obtained from the select_subtitle
 	function i.e., movie subtitles links.
@@ -58,13 +69,13 @@ def dl_sub(page, name, path="./"):
 			for chunk in r.iter_content(chunk_size=150):
 				if chunk:
 					f.write(chunk)
-		zip_extractor(found_sub.replace('-', ' '), name, path)
+		zip_extractor(found_sub.replace('-', ' '), name, path, lang=lang)
 	print("Subtitle ({}) - Downloaded\n".format(found_sub.replace('-', ' ').capitalize()))
 	# print("--- download_sub took %s seconds ---" % (time.time() - start_time))
 
 
 basename_ori = os.path.basename(file_path)
-file_name = rename.rename(basename_ori)
+file_name = rename.getNameOnly(basename_ori)
 
 file_parent = os.path.dirname(file_path)
 find_path = os.path.join(file_parent, basename_ori);
@@ -91,18 +102,22 @@ print(movie_name)
 	# Searches for the specified movie.
 movie_name = movie_name
 print("Searching For: {}".format(movie_name))
-sub_link = subscene.sel_title(name=movie_name)
+sub_link = subscene.sel_title(name=movie_name,lang=sub_lang)
 print("Subtitle Link for {} : {}".format(movie_name, sub_link))
-print("Subtitle List:")
+print("{} Subtitle List:".format(subscene.LANGUAGE[sub_lang]))
 if sub_link:
-	subtitle_list = subscene.sel_sub(page=sub_link, sub_count=2, name=movie_name_ori)
+	subtitle_list = subscene.sel_sub(page=sub_link, name=movie_name_ori, lang=sub_lang)
 	count = 0;
 	for link in subtitle_list:
 		print("({}): {}".format(count,link["name"].decode('utf-8')))
 		count+=1;
 		pass
-	sub_ind = int(input("Choose the number: "))
-	dl_sub(subtitle_list[sub_ind]["url"], movie_name_ori, basename_ori)
+	if len(subtitle_list)>0:
+		sub_ind = int(input("Choose the number: "))
+		dl_sub(subtitle_list[sub_ind]["url"], movie_name_ori, basename_ori, lang=sub_lang)
+	else:
+		print("not found")
+		pass
 # film = subscene.sel_title(movie_name);
 # print(film)
 # for subtitle in film.subtitles:
