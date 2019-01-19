@@ -2,3 +2,4 @@ subscene-api>=1.0
 json2xml
 bs4
 lxml
+requests
