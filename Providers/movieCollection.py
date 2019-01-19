@@ -1,7 +1,7 @@
 from Providers import rename
-import json
+import json,os
 
-MOVIE_SETS_PATH = "C:\\Users\\Fadz\\Documents\\Movie\\Movie Manager\\Storage/MovieSets.json"
+MOVIE_SETS_PATH = os.path.abspath("Storage/MovieSets.json")
 movieSets_str = rename.getFileContent(MOVIE_SETS_PATH)
 movie_json = json.loads(movieSets_str)
 movieSets = movie_json["Sets"]

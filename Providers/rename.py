@@ -1,4 +1,5 @@
 import os, re, ctypes, requests
+import platform
 ripQuality = ["4320p", "2160p", "1440p", "1080p", "1080i", "720p", "720i", "480p", "480i", "360p", "240p"]
 ripQualityWidth = ["7680", "3840", "2560", "1920", "1920", "1280", "1280", "858", "858", "480", "352"]
 pirateRelease=['CAMRip','CAM',
@@ -121,7 +122,7 @@ def downloadTo(path, url, hidden=False):
 			for chunk in r:
 				f.write(chunk)
 		if hidden:
-			ctypes.windll.kernel32.SetFileAttributesW(path+extension,FILE_ATTRIBUTE_HIDDEN)
+			setMode(path+extension,FILE_ATTRIBUTE_HIDDEN)
 			pass
 		return True
 	else:
@@ -141,9 +142,24 @@ def getFileContent(pathAndFileName):
 		data = theFile.read()
 		return data
 
+def setMode(path,mode):
+	abspath = os.path.abspath(path)
+	if(platform.system()=="Windows"):
+		ctypes.windll.kernel32.SetFileAttributesW(path,mode)
+	else:
+		if(mode == FILE_ATTRIBUTE_HIDDEN):
+			if(not os.path.basename(abspath).startswith(".")):
+				new_path = os.path.join(os.path.dirname(abspath),"."+os.path.basename(abspath))
+				os.rename(abspath,new_path)
+		if(mode == FILE_ATTRIBUTE_NORMAL):
+			if(os.path.basename(abspath).startswith(".")):
+				new_path = os.path.join(os.path.dirname(abspath),os.path.basename(abspath)[1:])
+				os.rename(abspath,new_path)
+
+
 def writeTo(path, content, hidden=False):
 	if os.path.exists(path):
-		ctypes.windll.kernel32.SetFileAttributesW(path,FILE_ATTRIBUTE_NORMAL)
+		setMode(path,FILE_ATTRIBUTE_NORMAL)
 		pass
 
 	file = open(path, 'w');
@@ -151,7 +167,7 @@ def writeTo(path, content, hidden=False):
 	file.close()
 	
 	if hidden:
-		ctypes.windll.kernel32.SetFileAttributesW(path,FILE_ATTRIBUTE_HIDDEN)
+		setMode(path,FILE_ATTRIBUTE_HIDDEN)
 		pass
 	pass
 

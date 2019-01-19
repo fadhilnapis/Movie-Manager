@@ -1,5 +1,5 @@
 # coding: utf-8
-import sys, os, re, zipfile, ctypes
+import sys, os, re, zipfile, platform, ctypes
 import requests
 from Providers import rename, subscene
 
@@ -51,7 +51,7 @@ def zip_extractor(name, new_name, path, lang="MA"):
 			os.rename(os.path.join(path, target_name),new_path)
 
 			FILE_ATTRIBUTE_HIDDEN = 0x02
-			ctypes.windll.kernel32.SetFileAttributesW(new_path,FILE_ATTRIBUTE_HIDDEN)
+			rename.setMode(new_path,FILE_ATTRIBUTE_HIDDEN)
 			pass
 	os.remove(name)
 	print("Done.\n");

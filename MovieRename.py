@@ -5,7 +5,7 @@ if len(sys.argv)>1:
 	file_path = sys.argv[1]
 	pass
 else:
-	file_path = "C:\\dasdqwe\\dasd\\Deadpool.2.2018.Super.Duper.Cut.UNRATED.1080p. WEBRip.akoam.net.mkv"
+	file_path = ",asdq,a,eadpool.2.2018.Super.Duper.Cut.UNRATED.1080p. WEBRip.akoam.net.mkv"
 	pass
 
 print("file_path:",file_path)
@@ -17,7 +17,7 @@ file_folder = os.path.dirname(file_path)
 file_new_folder = rename.rename(file_name_ori)
 
 if os.path.isfile(file_path):
-	new_path = os.path.join(file_folder,file_new_folder+"\\"+file_name+rename.getExtension(file_name_ori))
+	new_path = os.path.join(file_folder,file_new_folder,file_name+rename.getExtension(file_name_ori))
 	if not os.path.exists(file_new_folder):
 	    os.makedirs(file_new_folder)
 	    pass
